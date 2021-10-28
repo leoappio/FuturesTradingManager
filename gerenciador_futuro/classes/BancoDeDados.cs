@@ -14,6 +14,7 @@ namespace gerenciador_futuro.classes
     {
         public static string caminho = "Data Source = BancoDeDados.db";
         public SQLiteConnection conexao = new SQLiteConnection(caminho);
+        private static BancoDeDados conexaoBanco = new BancoDeDados();
 
 
         public void Conectar()
@@ -26,7 +27,7 @@ namespace gerenciador_futuro.classes
         }
         public static void ArmazenarDadosIniciais(string usuario, string nome, string senha)
         {
-            BancoDeDados conexaoBanco = new BancoDeDados();
+            
             conexaoBanco.Conectar();
             string sql = "INSERT INTO infoConta(usuario, nome, senha) VALUES ('"+usuario+"', '"+nome+"', '"+senha+"')";
             SQLiteCommand comando = new SQLiteCommand(sql, conexaoBanco.conexao);
@@ -37,7 +38,6 @@ namespace gerenciador_futuro.classes
         }
         public static void ArmazenarOperacao(string ativo,int contratos, double total, double custos, string diaAtual)
         {
-            BancoDeDados conexaoBanco = new BancoDeDados();
             conexaoBanco.Conectar();
             string sql = "INSERT INTO operacoes(Dia, Ativo, Contratos, Total, Custos) VALUES ('"+diaAtual+"', '" + ativo + "', '" + contratos + "', '" + total + "', '"+custos+"')";
             SQLiteCommand comando = new SQLiteCommand(sql, conexaoBanco.conexao);
@@ -49,8 +49,6 @@ namespace gerenciador_futuro.classes
         public static DataTable pegarTabelaOperacoesDeHoje()
         {
             string hoje = DateTime.Today.ToString("dd/MM/yyyy");
-
-            BancoDeDados conexaoBanco = new BancoDeDados();
             conexaoBanco.Conectar();
             string sql = "SELECT * FROM operacoes WHERE Dia ='"+hoje+"'";
             SQLiteDataAdapter dados = new SQLiteDataAdapter(sql, conexaoBanco.conexao);
@@ -64,7 +62,6 @@ namespace gerenciador_futuro.classes
 
         public static void ArmazenarInfosMetas(string ganhos, string perdas, int diasOperados)
         {
-            BancoDeDados conexaoBanco = new BancoDeDados();
             conexaoBanco.Conectar();
             string sql = "INSERT INTO infoMetas(Ganho, Perda, DiasOperados) VALUES ('" + ganhos + "', '" + perdas + "', '" + diasOperados +"')";
             SQLiteCommand comando = new SQLiteCommand(sql, conexaoBanco.conexao);
@@ -74,7 +71,6 @@ namespace gerenciador_futuro.classes
 
         public static DataTable PegarInfoMetas()
         {
-            BancoDeDados conexaoBanco = new BancoDeDados();
             conexaoBanco.Conectar();
             string sql = "SELECT * FROM infoMetas";
             SQLiteDataAdapter dados = new SQLiteDataAdapter(sql, conexaoBanco.conexao);
@@ -88,7 +84,6 @@ namespace gerenciador_futuro.classes
         public static void ArmazenarSaldoAtual(double saldo)
         {
 
-            BancoDeDados conexaoBanco = new BancoDeDados();
             conexaoBanco.Conectar();
             string sql = "UPDATE infoConta SET Saldo ='"+saldo+"'";
             SQLiteCommand comando = new SQLiteCommand(sql, conexaoBanco.conexao);
@@ -98,7 +93,6 @@ namespace gerenciador_futuro.classes
         public static void AtualizarInfoMetas(string ganhos, string perdas, int diasOperados)
         {
 
-            BancoDeDados conexaoBanco = new BancoDeDados();
             conexaoBanco.Conectar();
             string sql = "UPDATE infoMetas SET Ganho ='" + ganhos + "', Perda ='"+perdas+"', DiasOperados ='"+diasOperados+"'";
             SQLiteCommand comando = new SQLiteCommand(sql, conexaoBanco.conexao);
@@ -107,7 +101,6 @@ namespace gerenciador_futuro.classes
         }
         public static double PegarSaldoAtual()
         {
-            BancoDeDados conexaoBanco = new BancoDeDados();
             conexaoBanco.Conectar();
             string sql = "SELECT saldo FROM infoConta";
             SQLiteDataAdapter dados = new SQLiteDataAdapter(sql, conexaoBanco.conexao);
@@ -132,7 +125,6 @@ namespace gerenciador_futuro.classes
             string hoje = DateTime.Today.ToString("dd/MM/yyyy");
 
             DataTable dadosmetas = BancoDeDados.PegarDadosMetas();
-            BancoDeDados conexaoBanco = new BancoDeDados();
             conexaoBanco.Conectar();
             string sql = "";
 
@@ -157,7 +149,6 @@ namespace gerenciador_futuro.classes
         {
             string hoje = DateTime.Today.ToString("dd/MM/yyyy");
 
-            BancoDeDados conexaoBanco = new BancoDeDados();
             conexaoBanco.Conectar();
             string sql = "SELECT * FROM metasPorDia WHERE Dia ='" + hoje + "'";
             SQLiteDataAdapter dados = new SQLiteDataAdapter(sql, conexaoBanco.conexao);
@@ -170,7 +161,6 @@ namespace gerenciador_futuro.classes
 
         public static DataTable PegarTabelaPeriodo(string dia1, string dia2)
         {
-            BancoDeDados conexaoBanco = new BancoDeDados();
             conexaoBanco.Conectar();
             string sql = "SELECT * FROM operacoes WHERE Dia >='"+dia1+"' AND Dia<='"+dia2+"'";
             SQLiteDataAdapter dados = new SQLiteDataAdapter(sql, conexaoBanco.conexao);
@@ -184,7 +174,6 @@ namespace gerenciador_futuro.classes
 
         public static DataTable PegarTodasOperacoes()
         {
-            BancoDeDados conexaoBanco = new BancoDeDados();
             conexaoBanco.Conectar();
             string sql = "SELECT * FROM operacoes";
             SQLiteDataAdapter dados = new SQLiteDataAdapter(sql, conexaoBanco.conexao);
@@ -197,7 +186,6 @@ namespace gerenciador_futuro.classes
 
         public static void ApagarOperacao(int numero)
         {
-            BancoDeDados conexaoBanco = new BancoDeDados();
             conexaoBanco.Conectar();
 
             var cmd = new SQLiteCommand(conexaoBanco.conexao);
